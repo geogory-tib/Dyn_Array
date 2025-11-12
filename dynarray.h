@@ -10,6 +10,7 @@ template <typename T> struct Dyn_Arry {
   size_t cap;
   size_t len;
   T *buffer;
+ /*pushes elements to the back will allocate if cap is too small*/
   int append(T element) {
     if (len >= cap) {
       int pass = grow(10);
@@ -21,6 +22,7 @@ template <typename T> struct Dyn_Arry {
     len++;
     return 0;
   }
+/* reallocs the buffer and updates the meta data of the struct*/
   int grow(size_t size) {
     T *tmp = (T *)realloc(buffer, (cap + size) * sizeof(T));
     if (tmp == NULL) {
@@ -35,10 +37,12 @@ template <typename T> struct Dyn_Arry {
     cap = 0;
     len = 0;
   }
+ /*zeros the buffer*/
   inline void erase() {
     memset(buffer, 0, cap - 1);
     len = 0;
   }
+ /*replaces the element at the given index with the supplied value*/
   inline void replace_at(size_t index, T elem) {
     if (index >= len) {
       printf("Attemp of out of bounds replace. Array with Len:%ld indexed with "
@@ -48,6 +52,7 @@ template <typename T> struct Dyn_Arry {
     }
     buffer[index] = elem;
   }
+/*This can allocate default is to allocate space for 10 more elments*/
   int insert_at(size_t index, T elem) {
     if (len + 1 >= cap) {
       int suc = grow(10);
@@ -66,6 +71,9 @@ template <typename T> struct Dyn_Arry {
     }
     return 0;
   }
+/*
+  This does not rezise the buffer but deletes whatever element and shifts them down
+*/
   void delete_at(size_t index) {
     T holder1 = buffer[index + 1];
     buffer[index] = holder1;
@@ -81,6 +89,7 @@ template <typename T> struct Dyn_Arry {
     buffer[len - 1] = 0;
     len--;
   }
+/*shrinks the array by the given argument */
   int shrink(size_t decrement) {
     T *tmp = (T *)realloc(buffer, (cap - decrement * sizeof(T)));
     if (tmp == NULL) {
@@ -109,4 +118,4 @@ template <typename T> Dyn_Arry<T> new_dynarray(size_t size) {
   return ret;
 }
 
-#endif // !DEBUG
+#endif 
