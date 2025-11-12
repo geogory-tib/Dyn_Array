@@ -15,6 +15,7 @@ int main(void){
   for (int i = 0; i < 100;i++){
     arr.append(i); // pushes to back
   }
+  printf("%d",arr[1]); //brackects can only be used to retreive data they cannot augment the buffer
   arr.free(); //frees all
 }
 
